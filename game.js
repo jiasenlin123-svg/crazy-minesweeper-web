@@ -207,6 +207,7 @@
     if (cell.revealed) return;
     if (state.lockedCells.has(key(r, c))) return showToast('⚡ 过载区域暂时不能操作。');
     cell.flagged = !cell.flagged;
+    // 重要：不根据旗帜是否正确给不同反馈，避免利用疯狂值反推出雷位。
     adjustCrazy(1 * state.mode.crazyMultiplier);
     renderAll();
   }
