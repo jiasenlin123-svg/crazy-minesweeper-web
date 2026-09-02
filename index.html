@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>疯狂扫雷｜会发疯的扫雷</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-line">
+          <span class="series-kicker">疯狂系列 · #02</span>
+          <h1><span>疯狂</span>扫雷</h1>
+        </div>
+        <p class="subtitle">逻辑负责活下去，疯狂负责搞事情。</p>
+      </div>
+
+      <article class="chaos-card header-chaos">
+        <div class="chaos-head">
+          <span>🔥 CHAOS 疯狂值</span>
+          <strong id="crazyValue">0%</strong>
+        </div>
+        <div class="chaos-track"><div id="crazyFill" class="chaos-fill"></div></div>
+        <div class="chaos-foot">
+          <span id="crazyStage">🟢 稳定</span>
+          <span id="crazyHint">雷区暂时正常</span>
+        </div>
+      </article>
+    </header>
+
+    <section class="game-layout">
+      <article class="board-card">
+        <div id="boardWrap" class="board-wrap">
+          <span id="radarModeBadge" class="mode-badge board-mode-badge hidden">🔍 雷达扫描中：点一个格子</span>
+          <div id="board" class="board" aria-label="疯狂扫雷棋盘"></div>
+          <div id="resultOverlay" class="result-overlay hidden">
+            <section class="result-card">
+              <div id="resultIcon" class="result-icon">🎉</div>
+              <h2 id="resultTitle">雷区清理完成！</h2>
+              <p id="resultLead">这次你压住了疯狂。</p>
+              <div class="result-stats">
+                <div><small>用时</small><b id="resultTime">00:00</b></div>
+                <div><small>完成度</small><b id="resultCompletion">100%</b></div>
+                <div><small>最高疯狂值</small><b id="resultCrazy">0%</b></div>
+                <div><small>最高连击</small><b id="resultCombo">×0</b></div>
+                <div><small>疯狂事件</small><b id="resultEvents">0</b></div>
+              </div>
+              <button id="resultRestartBtn" class="primary-btn" type="button">再来一局</button>
+            </section>
+          </div>
+        </div>
+        <p class="board-tip">左键揭格 · 右键插旗 · 首击 3×3 安全 · 疯狂事件不会直接杀死你</p>
+      </article>
+
+      <aside class="side-panel">
+        <section class="panel-card control-card">
+          <div class="control-head">
+            <div class="mode-summary">
+              <small>当前挑战</small>
+              <strong id="modeTitle">🎯 正常模式</strong>
+              <span id="boardMeta">12×12 · 22 雷</span>
+            </div>
+            <div class="control-actions">
+              <button id="soundBtn" class="tool-btn" type="button">📢 音效 ON</button>
+              <button id="restartBtn" class="tool-btn" type="button">↻ 重开</button>
+            </div>
+          </div>
+          <div class="quick-stats">
+            <div class="quick-stat"><small>💣 剩余</small><strong id="mineCount">0</strong></div>
+            <div class="quick-stat"><small>⏱ 用时</small><strong id="timer">00:00</strong></div>
+            <div class="quick-stat combo-card"><small>SAFE</small><strong id="combo">×0</strong></div>
+          </div>
+        </section>
+
+        <section class="panel-card status-card priority-card">
+          <div class="section-head"><h2>🚨 当前状态</h2><span id="statusBadge" class="status-badge">进行中</span></div>
+          <div id="currentStatus" class="current-status">
+            <div id="statusIcon" class="status-icon">🎯</div>
+            <div class="status-copy"><strong id="statusTitle">正常模式准备就绪</strong><p id="statusText">点开第一格，雷区才会生成。</p></div>
+          </div>
+        </section>
+
+        <section class="panel-card items-card">
+          <div class="section-head"><h2>🎒 救命道具</h2><span id="inventoryTotal">0 / 4</span></div>
+          <div class="item-list">
+            <button id="calmBtn" class="item-btn" type="button">
+              <span>🧯</span><div><b>冷静剂</b><small>疯狂值 -30</small></div><em id="calmCount">×0</em>
+            </button>
+            <button id="radarBtn" class="item-btn" type="button">
+              <span>🔍</span><div><b>雷达</b><small>扫描 3×3 雷数</small></div><em id="radarCount">×0</em>
+            </button>
+            <div class="item-btn passive-item">
+              <span>🛡️</span><div><b>防爆盾</b><small>踩雷自动挡一次</small></div><em id="shieldCount">×0</em>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-card log-card secondary-card">
+          <div class="section-head"><h2>🎬 最近事故</h2><span id="eventCount">0 次</span></div>
+          <ol id="eventLog" class="event-log"><li class="muted">暂时安全……</li></ol>
+        </section>
+
+        <section class="panel-card difficulty-card tertiary-card">
+          <div class="section-head"><h2>🎮 难度</h2><span>切换即重开</span></div>
+          <div class="mode-switcher">
+            <button class="mode-btn" data-mode="easy" type="button">🌱 轻松</button>
+            <button class="mode-btn active" data-mode="normal" type="button">🎯 正常 ⭐</button>
+            <button class="mode-btn" data-mode="crazy" type="button">☠️ 疯狂</button>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <div id="eventOverlay" class="event-overlay hidden" role="dialog" aria-modal="true">
+    <div class="event-stage">
+      <div class="event-tape">⚠ CHAOS EVENT · 疯狂事件 · CHAOS EVENT ⚠</div>
+      <div id="overlayIcon" class="overlay-icon">💣</div>
+      <h2 id="overlayTitle">地雷暴动</h2>
+      <p id="overlayText">深层未知区域即将发生变化。</p>
+      <div id="overlayCountdown" class="overlay-countdown">5</div>
+      <small>规则变化会明确提示，系统不会偷偷改动你正在推理的边界。</small>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
